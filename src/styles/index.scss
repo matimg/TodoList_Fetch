@@ -25,3 +25,7 @@ body{
   display: block;
   float: right;
 }
+
+input:focus{
+    outline: none;
+}

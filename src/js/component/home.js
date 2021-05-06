@@ -5,17 +5,21 @@ import { array } from "prop-types";
 export function Home() {
 	const [item, setItem] = useState("");
 	const [itemList, setItemList] = useState([]);
+	const [placeholder, setPlaceholder] = useState("No tasks, add a task");
 	let addItem = e => {
 		e.preventDefault();
 		let itemsCopy = [...itemList];
 		itemsCopy.push(item);
 		setItemList(itemsCopy);
 		setItem("");
+		setPlaceholder("");
 	};
 
 	let removeItem = element => {
 		let itemsCopy = [...itemList];
 		setItemList(itemsCopy.filter(item => item !== element));
+		if (itemList.length == 1) setPlaceholder("No tasks, add a task");
+		else setPlaceholder("");
 	};
 
 	return (
@@ -27,8 +31,9 @@ export function Home() {
 				<form onSubmit={addItem}>
 					<input
 						type="text"
-						className="list-group-item text-secondary w-100"
+						className="list-group-item text-secondary pl-5 w-100"
 						onChange={() => setItem(event.target.value)}
+						placeholder={placeholder}
 						value={item}
 					/>
 				</form>
@@ -36,7 +41,7 @@ export function Home() {
 					{itemList.map((element, id) => (
 						<li
 							key={id}
-							className="list-group-item text-left text-secondary item">
+							className="list-group-item text-left text-secondary pl-5 h-100 item">
 							{element}
 							<i
 								type="button"
@@ -45,9 +50,9 @@ export function Home() {
 						</li>
 					))}
 					<p
-						className="list-group-item text-secondary d-flex float-left pl-3"
+						className="list-group-item text-secondary d-flex float-left pl-3 h-100"
 						style={{ fontSize: "12px" }}>
-						{itemList.length} items left
+						{itemList.length} item left
 					</p>
 				</ul>
 			</div>
