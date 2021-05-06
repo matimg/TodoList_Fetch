@@ -11,3 +11,17 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+body{
+    background: #f7f6f7;
+}
+
+.boton{
+  display: none;
+}
+
+.item:hover > .boton{
+  height: 5px;
+  padding-top: 5px;
+  display: block;
+  float: right;
+}
