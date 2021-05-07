@@ -52,7 +52,10 @@ export function Home() {
 			const res = await fetch(urlApi);
 			const data = await res.json();
 			setItemList(data);
-			if (data.length == 0 || data[0].label == "sample task")
+			if (
+				data.length == 0 ||
+				(data.length == 1 && data[0].label == "sample task")
+			)
 				setPlaceholder("No tasks, add a task");
 		} catch (error) {
 			console.log(error);
@@ -125,7 +128,7 @@ export function Home() {
 					</p>
 				</ul>
 				<button
-					className="btn btn-secondary"
+					className="btn btn-outline-secondary"
 					onClick={() => removeItems()}>
 					Clean
 				</button>
