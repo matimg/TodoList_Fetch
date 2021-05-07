@@ -1,27 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { array } from "prop-types";
 
 //create your first component
 export function Home() {
 	const [item, setItem] = useState("");
 	const [itemList, setItemList] = useState([]);
-	const [placeholder, setPlaceholder] = useState("No tasks, add a task");
+	const [placeholder, setPlaceholder] = useState("Add a task");
+	const urlApi = "https://assets.breatheco.de/apis/fake/todos/user/matias";
+
+	useEffect(() => {
+		getItems();
+	}, []);
+
 	let addItem = e => {
 		e.preventDefault();
 		if (item != "") {
+			let newItem = {
+				label: item,
+				done: false
+			};
 			let itemsCopy = [...itemList];
-			itemsCopy.push(item);
+			itemsCopy.push(newItem);
 			setItemList(itemsCopy);
+			updateItems(itemsCopy);
 			setItem("");
-			setPlaceholder("");
 		}
 	};
 
 	let removeItem = element => {
 		let itemsCopy = [...itemList];
 		setItemList(itemsCopy.filter(item => item !== element));
-		if (itemList.length == 1) setPlaceholder("No tasks, add a task");
-		else setPlaceholder("");
+		if (itemList.length == 1) {
+			deleteUser();
+		} else {
+			updateItems(itemsCopy.filter(item => item !== element));
+		}
+	};
+
+	const getItems = async () => {
+		try {
+			const res = await fetch(urlApi);
+			const data = await res.json();
+			if (data.length == 0) {
+				postUser();
+			} else {
+				setItemList(data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const updateItems = async updatedList => {
+		let updatedListToSend = JSON.stringify(updatedList);
+		let options = {
+			method: "PUT",
+			body: updatedListToSend,
+			headers: {
+				"Content-Type": "application/json"
+			}
+		};
+
+		try {
+			const res = await fetch(urlApi, options);
+			const data = await res.json();
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const postUser = async () => {
+		let options = {
+			method: "POST",
+			body: [],
+			headers: {
+				"Content-Type": "application/json"
+			}
+		};
+		try {
+			const res = await fetch(urlApi, options);
+			const data = await res.json();
+			getItems();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const deleteUser = async () => {
+		let options = {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		};
+		try {
+			const res = await fetch(urlApi, options);
+			const data = await res.json();
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -44,7 +123,7 @@ export function Home() {
 						<li
 							key={id}
 							className="list-group-item text-left text-secondary pl-5 h-100 item">
-							{element}
+							{element.label}
 							<i
 								type="button"
 								className="fa fa-times boton"
