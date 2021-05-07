@@ -30,22 +30,16 @@ export function Home() {
 	let removeItem = element => {
 		let itemsCopy = [...itemList];
 		setItemList(itemsCopy.filter(item => item !== element));
-		if (itemList.length == 1) {
-			deleteUser();
-		} else {
-			updateItems(itemsCopy.filter(item => item !== element));
-		}
+		updateItems(itemsCopy.filter(item => item !== element));
+		if (itemList.length == 1) setPlaceholder("No tasks, add a task");
 	};
 
 	const getItems = async () => {
 		try {
 			const res = await fetch(urlApi);
 			const data = await res.json();
-			if (data.length == 0) {
-				postUser();
-			} else {
-				setItemList(data);
-			}
+			setItemList(data);
+			if (data.length == 0) setPlaceholder("No tasks, add a task");
 		} catch (error) {
 			console.log(error);
 		}
@@ -61,39 +55,6 @@ export function Home() {
 			}
 		};
 
-		try {
-			const res = await fetch(urlApi, options);
-			const data = await res.json();
-			console.log(data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const postUser = async () => {
-		let options = {
-			method: "POST",
-			body: [],
-			headers: {
-				"Content-Type": "application/json"
-			}
-		};
-		try {
-			const res = await fetch(urlApi, options);
-			const data = await res.json();
-			getItems();
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const deleteUser = async () => {
-		let options = {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		};
 		try {
 			const res = await fetch(urlApi, options);
 			const data = await res.json();
