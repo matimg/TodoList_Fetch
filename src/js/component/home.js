@@ -24,14 +24,27 @@ export function Home() {
 			setItemList(itemsCopy);
 			updateItems(itemsCopy);
 			setItem("");
+			setPlaceholder("Add a task");
 		}
 	};
 
 	let removeItem = element => {
 		let itemsCopy = [...itemList];
 		setItemList(itemsCopy.filter(item => item !== element));
-		updateItems(itemsCopy.filter(item => item !== element));
-		if (itemList.length == 1) setPlaceholder("No tasks, add a task");
+		if (itemList.length == 1) {
+			setPlaceholder("No tasks, add a task");
+			let newItem = {
+				label: "sample task",
+				done: false
+			};
+			let itemsCopy = [];
+			itemsCopy.push(newItem);
+			setItemList(itemsCopy);
+			updateItems(itemsCopy);
+		} else {
+			setPlaceholder("Add a task");
+			updateItems(itemsCopy.filter(item => item !== element));
+		}
 	};
 
 	const getItems = async () => {
@@ -39,7 +52,8 @@ export function Home() {
 			const res = await fetch(urlApi);
 			const data = await res.json();
 			setItemList(data);
-			if (data.length == 0) setPlaceholder("No tasks, add a task");
+			if (data.length == 0 || data[0].label == "sample task")
+				setPlaceholder("No tasks, add a task");
 		} catch (error) {
 			console.log(error);
 		}
@@ -74,6 +88,7 @@ export function Home() {
 		setItemList(itemsCopy);
 		updateItems(itemsCopy);
 		setItem("");
+		setPlaceholder("No tasks, add a task");
 	};
 
 	return (
