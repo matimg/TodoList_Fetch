@@ -64,6 +64,18 @@ export function Home() {
 		}
 	};
 
+	const removeItems = () => {
+		let newItem = {
+			label: "sample task",
+			done: false
+		};
+		let itemsCopy = [];
+		itemsCopy.push(newItem);
+		setItemList(itemsCopy);
+		updateItems(itemsCopy);
+		setItem("");
+	};
+
 	return (
 		<div className="text-center mt-5">
 			<p className="display-1" style={{ color: "#e4dfe0" }}>
@@ -97,6 +109,11 @@ export function Home() {
 						{itemList.length} item left
 					</p>
 				</ul>
+				<button
+					className="btn btn-secondary"
+					onClick={() => removeItems()}>
+					Clean
+				</button>
 			</div>
 		</div>
 	);
