@@ -8,11 +8,13 @@ export function Home() {
 	const [placeholder, setPlaceholder] = useState("No tasks, add a task");
 	let addItem = e => {
 		e.preventDefault();
-		let itemsCopy = [...itemList];
-		itemsCopy.push(item);
-		setItemList(itemsCopy);
-		setItem("");
-		setPlaceholder("");
+		if (item != "") {
+			let itemsCopy = [...itemList];
+			itemsCopy.push(item);
+			setItemList(itemsCopy);
+			setItem("");
+			setPlaceholder("");
+		}
 	};
 
 	let removeItem = element => {
